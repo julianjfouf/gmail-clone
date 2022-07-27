@@ -43,3 +43,22 @@
     align-items: center;
     padding-right: 20px;
 }
+
+.logoutImg {
+  cursor: pointer;
+}
+
+.logoutMsg {
+  position:absolute;
+  font-size: 10px;
+  right: 24px;
+  top: 60px;
+  opacity: 1;
+  color: gray;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logoutMsg:hover {
+  text-decoration: underline
+}

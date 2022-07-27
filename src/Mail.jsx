@@ -14,9 +14,13 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import PrintIcon from '@mui/icons-material/Print';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { selectOpenMail } from './features/mailSlice';
+import { useSelector } from "react-redux"
 
 const Mail = () => {
     const navigate = useNavigate();
+    const mail = useSelector(selectOpenMail)
+    console.log(mail)
     return (
         <div className='mail'>
             <div className="mail__tools">
@@ -63,13 +67,13 @@ const Mail = () => {
             </div>
             <div className="mail__body">
                 <div className="mail__bodyHeader">
-                    <h2>Subject</h2>
+                    <h2>{mail?.subject}</h2>
                     <LabelImportantIcon className="mail__important" />
-                    <p>Title</p>
-                    <p className='mail__time'>Time</p>
+                    <p>{mail?.title}</p>
+                    <p className='mail__time'>{mail?.time}</p>
                 </div>
                 <div className="mail__message">
-                    <p>Message</p>
+                    <p>{mail?.description}</p>
                 </div>
             </div>
         </div>

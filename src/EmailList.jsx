@@ -13,8 +13,66 @@ import Section from "./Section";
 import PeopleIcon from "@mui/icons-material/People";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import EmailRow from "./EmailRow";
+import { useState, useEffect } from "react";
+import { db } from "./firebase";
+import {
+  collection,
+  query,
+  orderBy,
+  getDoc,
+  getDocs,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
 
 const EmailList = () => {
+  const [emails, setEmails] = useState([]);
+
+  useEffect(() => {
+    const q = query(collection(db, "emails"), orderBy("timestamp", "desc"));
+    onSnapshot(q, (querySnapshot) => {
+      setEmails(
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }))
+      );
+    });
+  });
+
+  // const [michaels, setMichaels] = useState([]);
+  // const id = [];
+  // const [count, setCount] = useState(0);
+
+  // function updateEmails() {
+  //   setMichaels(emails);
+  // }
+
+  // const docRef = collection(db, "emails");
+
+  // async function getId() {
+  //   const docSnap = await getDocs(docRef);
+  //   docSnap.forEach((item) => id.push(item.id));
+  //   for (let i = 0; i < id.length; ++i) {
+  //     const messageRef = doc(db, "emails", id[i]);
+  //     async function getMessage() {
+  //       const messageSnap = await getDoc(messageRef);
+  //       const messageData = messageSnap.data();
+  //     }
+  //     getMessage();
+  //   }
+  //   for (let i = 0; i < id.length; ++i) {
+  //     const messageRef = doc(db, "emails", id[i]);
+  //     async function getMessage() {
+  //       const messageSnap = await getDoc(messageRef);
+  //       const messageData = messageSnap.data();
+  //       emails.push(messageData);
+  //     }
+  //     getMessage();
+  //   }
+  // }
+  // getId();
+
   return (
     <div className="emailList">
       <div className="emailList__settings">
@@ -52,11 +110,14 @@ const EmailList = () => {
       </div>
 
       <div className="emailList__list">
-        <EmailRow
-        title="battle"
-        subject="pass"
-        description="fortnite"
-        time="noon" />
+        {emails.map(({ id, data: { to, subject, message, timestamp}}) => (
+          <EmailRow
+          title={to}
+          subject={subject}
+          key={id}
+          description={message}
+          time={new Date(timestamp?.seconds * 1000).toUTCString()} />
+        ))}
       </div>
     </div>
   );

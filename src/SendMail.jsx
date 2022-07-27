@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { closeSendMessage } from "./features/mailSlice";
 import { db } from "./firebase";
+import { collection, addDoc } from "firebase/firestore"
 import firebase from "firebase/compat/app";
 
 const SendMail = () => {
@@ -20,7 +21,7 @@ const SendMail = () => {
 
   const onSubmit = (formData) => {
     console.log(formData);
-    db.collection("emails").add({
+    addDoc(collection(db, "emails"), {
       to: formData.to,
       subject: formData.subject,
       message: formData.message,
@@ -43,20 +44,20 @@ const SendMail = () => {
           name="to"
           placeholder="To:"
           type="email"
-          ref={register("to", { required: true })}
+          {...register("to", { required: true })}
         />
         {errors.to && <p className="sendMail__error">This field is required</p>}
         <input
           name="subject"
           placeholder="Subject:"
           type="text"
-          ref={register("subject", { required: true })}
+          {...register("subject", { required: true })}
         />
         {errors.subject && (
           <p className="sendMail__error">This field is required</p>
         )}
         <input
-          ref={register("message", { required: true })}
+          {...register("message", { required: true })}
           name="message"
           placeholder="Message..."
           type="text"
